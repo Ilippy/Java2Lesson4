@@ -7,7 +7,7 @@ import java.awt.GridBagLayout;
 import javax.swing.*;
 //import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.DefaultCaret;
+//import javax.swing.text.DefaultCaret;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -20,7 +20,7 @@ public class ChatWindow extends JFrame{
     private JPanel contentPane;
     private JTextField txtMessage;
     private JTextArea history;
-    private DefaultCaret caret;
+    //private DefaultCaret caret;
     private static final String CHAT_CLIENT = "Chat Client";
     private static String fileName = "src/AdvanceInterface/history.txt";
 
@@ -51,8 +51,6 @@ public class ChatWindow extends JFrame{
         GridBagLayout gbl_contentPane = new GridBagLayout();
         gbl_contentPane.columnWidths = new int[]{28, 815, 30, 7}; // SUM = 880
         gbl_contentPane.rowHeights = new int[]{35, 475, 40}; // SUM = 550
-        gbl_contentPane.columnWeights = new double[]{1.0, 1.0};
-        gbl_contentPane.rowWeights = new double[]{1.0, Double.MIN_VALUE};
         contentPane.setLayout(gbl_contentPane);
 
         history = new JTextArea();
@@ -63,10 +61,12 @@ public class ChatWindow extends JFrame{
         GridBagConstraints scrollConstraints = new GridBagConstraints();
         scrollConstraints.insets = new Insets(0, 0, 5, 5);
         scrollConstraints.fill = GridBagConstraints.BOTH;
-        scrollConstraints.gridx = 0;  // выбор столбца из массива {28, 815, 30, 7} (т.е будет 815)
-        scrollConstraints.gridy = 0;  // выбор строки из массива {35, 475, 40} (т.е будет 475)
+        scrollConstraints.gridx = 0;  // выбор столбца из массива {28, 815, 30, 7} (т.е будет 28)
+        scrollConstraints.gridy = 0;  // выбор строки из массива {35, 475, 40} (т.е будет 35)
         scrollConstraints.gridwidth = 3; //обединяем 3 столбца и ширина столбца будет 28 + 815 + 30
         scrollConstraints.gridheight = 2; //обединяем 2 строки и высота строки будет 35 + 475
+        scrollConstraints.weightx = 1; // маштабируемый по х при 1
+        scrollConstraints.weighty = 1; // маштабируемый по у при 1
         scrollConstraints.insets = new Insets(0, 5, 0, 0); // отступы
         contentPane.add(scroll, scrollConstraints);
 
@@ -84,6 +84,8 @@ public class ChatWindow extends JFrame{
         gbc_txtMessage.gridx = 0;
         gbc_txtMessage.gridy = 2;
         gbc_txtMessage.gridwidth = 2;
+        gbc_txtMessage.weightx = 1; // маштабируемый по х
+        gbc_txtMessage.weighty = 0; // не маштабируемый по у при 0 (дефолтное значение 0, можно не писать)
         contentPane.add(txtMessage, gbc_txtMessage);
         txtMessage.setColumns(10);
 
@@ -99,6 +101,9 @@ public class ChatWindow extends JFrame{
         gbc_btnSend.insets = new Insets(0, 0, 0, 5);
         gbc_btnSend.gridx = 2;
         gbc_btnSend.gridy = 2;
+        gbc_btnSend.weightx = 0; // не маштабируемый по x при 0 (дефолтное значение 0, можно не писать)
+        gbc_btnSend.weighty = 0; // не маштабируемый по у при 0 (дефолтное значение 0, можно не писать)
+
         contentPane.add(btnSend, gbc_btnSend);
 
         setVisible(true);

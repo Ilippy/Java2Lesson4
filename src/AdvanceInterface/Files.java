@@ -47,7 +47,7 @@ public class Files {
                 String s;
                 while ((s = br.readLine()) != null) {
                     sb.append(s);
-                    sb.append("\n");
+                    sb.append(System.lineSeparator());
                 }
             } finally {
                 //Также не забываем закрыть файл
@@ -78,19 +78,6 @@ public class Files {
     }
 
 
-    public static void main(String[] args) {
-        /*write(fileName, "something");
-        write(fileName, "something");
-        write(fileName, "something");
-        write(fileName, "something");*/
-        String textFromFile = null;
-        try {
-            textFromFile = Files.read(fileName);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println(textFromFile);
-    }
 
 
 }
