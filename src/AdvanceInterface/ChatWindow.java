@@ -163,10 +163,16 @@ public class ChatWindow extends JFrame implements Runnable {
         checkFileSize = new Thread(CHECK_FILE_SIZE) {
             public void run() {
                 while (running) {
-                    double oldFileSize = file.checkFileSize();
-                    if (oldFileSize != fileSize) {
+                    double newFileSize = file.checkFileSize();
+                    if (newFileSize != fileSize) {
+                        System.out.println("old:"+fileSize+ " new:" +newFileSize);
+                        if(newFileSize == 0.0){
+                            history.setText("");
+                            fileSize=0;
+                        }
                         try {
                             history.setText(file.read());
+                            fileSize = newFileSize;
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
