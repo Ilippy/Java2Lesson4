@@ -53,7 +53,7 @@ public class Files {
 				sb.append(sCurrentLine);
 				sb.append(System.lineSeparator());
 			}
-
+			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
