@@ -117,9 +117,9 @@ public class ChatWindow extends JFrame{
     }
 
     private void console(String msg){
-        msg += "\n";
+        msg += System.lineSeparator();
         history.append(msg);
-        history.setCaretPosition(history.getDocument().getLength());
+        history.setCaretPosition(history.getDocument().getLength()); // это позволяет переводить каретку в JTextArea каждый раз когда мы отправляем сообщение
         try {
             Files.update(fileName, msg);
         } catch (FileNotFoundException e) {
