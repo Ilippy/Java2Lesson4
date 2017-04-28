@@ -159,13 +159,14 @@ public class ChatWindow extends JFrame implements Runnable {
         checkFileSize();
     }
 
+    //TODO выяснить почему при отправке сообщения file.checkFileSize() = 0, а потом уже реальному значению.
     private void checkFileSize() {
         checkFileSize = new Thread(CHECK_FILE_SIZE) {
             public void run() {
                 while (running) {
                     double newFileSize = file.checkFileSize();
                     if (newFileSize != fileSize) {
-                        System.out.println("old:"+fileSize+ " new:" +newFileSize);
+                        System.out.println("old:"+fileSize+ " new:" +newFileSize);  // для тестирования
                         if(newFileSize == 0.0){
                             history.setText("");
                             fileSize=0;
