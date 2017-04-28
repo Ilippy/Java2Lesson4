@@ -13,9 +13,6 @@ public class Files {
     }
 
     private void write(String text) {
-        //Определяем файл
-        File file = new File(fileName);
-
         try {
             //проверяем, что если файл не существует то создаем его
             if (!file.exists()) {

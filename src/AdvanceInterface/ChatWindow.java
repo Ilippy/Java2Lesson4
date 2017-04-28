@@ -98,7 +98,7 @@ public class ChatWindow extends JFrame implements Runnable {
         scrollConstraints.gridheight = 2; //обединяем 2 строки и высота строки будет 35 + 475
         scrollConstraints.weightx = 1; // маштабируемый по х при 1
         scrollConstraints.weighty = 1; // маштабируемый по у при 1
-        scrollConstraints.insets = new Insets(0, 5, 0, 0); // отступы
+//        scrollConstraints.insets = new Insets(0, 5, 0, 0); // отступы
         contentPane.add(scroll, scrollConstraints);
 
         txtMessage = new JTextField();
