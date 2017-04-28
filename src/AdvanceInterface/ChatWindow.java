@@ -41,7 +41,7 @@ public class ChatWindow extends JFrame implements Runnable {
         creatingWindow();
         file = new Files(FILE_NAME);
         try {
-            history.setText(file.read(FILE_NAME));
+            history.setText(file.read());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class ChatWindow extends JFrame implements Runnable {
 		mntmDeleteFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				file.delete(); //TODO возникает ошибка при удаление если открыты несколько окон
+				file.delete();
 			}
 		});
 		mnFile.add(mntmDeleteFile);
@@ -166,7 +166,7 @@ public class ChatWindow extends JFrame implements Runnable {
                     double oldFileSize = file.checkFileSize();
                     if (oldFileSize != fileSize) {
                         try {
-                            history.setText(file.read(FILE_NAME));
+                            history.setText(file.read());
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }

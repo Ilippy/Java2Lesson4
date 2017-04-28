@@ -35,7 +35,7 @@ public class Files {
         }
     }
 
-    public String read(String fileName) throws FileNotFoundException {
+    public String read() throws FileNotFoundException {
         //Этот спец. объект для построения строки
         StringBuilder sb = new StringBuilder();
 
@@ -45,37 +45,32 @@ public class Files {
             e.printStackTrace();
         }
 
-        try {
-            //Объект для чтения файла в буфер
-            BufferedReader br = new BufferedReader(new FileReader(file.getAbsoluteFile()));
-            try {
-                //В цикле построчно считываем файл
-                String s;
-                while ((s = br.readLine()) != null) {
-                    sb.append(s);
-                    sb.append(System.lineSeparator());
-                }
-            } finally {
-                //Также не забываем закрыть файл
-                br.close();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+
+			String sCurrentLine;
+
+			while ((sCurrentLine = br.readLine()) != null) {
+				sb.append(sCurrentLine);
+				sb.append(System.lineSeparator());
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         //Возвращаем полученный текст с файла
         return sb.toString();
     }
 
 
-    public void update( String newText) throws FileNotFoundException {
+    public void update(String newText) throws FileNotFoundException {
         try {
             existFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
         StringBuilder sb = new StringBuilder();
-        String oldFile = read(fileName);
+        String oldFile = read();
         sb.append(oldFile);
         sb.append(newText);
         write(sb.toString());
