@@ -17,19 +17,25 @@ import java.io.FileNotFoundException;
 
 public class ChatWindow extends JFrame implements Runnable {
 
-    private static final String CHECK_FILE_SIZE = "Check file size";
-    private static final String RUNNING = "Running";
-    private JPanel contentPane;
+	private JPanel contentPane;
     private JTextField txtMessage;
     private JTextArea history;
+	private JMenuBar menuBar;
+	private JMenu mnFile;
+	private JMenuItem mntmDeleteFile;
+	private JMenuItem mntmExit;
     //private DefaultCaret caret;
-    private static final String CHAT_CLIENT = "Chat Client";
-    private static String FILE_NAME = "src/AdvanceInterface/history.txt";
+
     private Thread run, checkFileSize;
     private boolean running = false;
     private Files file;
     private double fileSize;
 
+    private static final String CHAT_CLIENT = "Chat Client";
+    private static String FILE_NAME = "src/AdvanceInterface/history.txt";
+    private static final String CHECK_FILE_SIZE = "Check file size";
+    private static final String RUNNING = "Running";
+	private static final String FILE = "File";
 
     public ChatWindow() {
         creatingWindow();
@@ -54,7 +60,21 @@ public class ChatWindow extends JFrame implements Runnable {
         setTitle(CHAT_CLIENT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(880, 570);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);  // выводит окно по центру
+
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		mnFile = new JMenu(FILE);
+		menuBar.add(mnFile);
+		mntmDeleteFile = new JMenuItem("Delete File");
+		mntmDeleteFile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				file.delete(); //TODO возникает ошибка при удаление если открыты несколько окон
+			}
+		});
+		mnFile.add(mntmDeleteFile);
+
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -126,7 +146,7 @@ public class ChatWindow extends JFrame implements Runnable {
         message += System.lineSeparator();
         history.setCaretPosition(history.getDocument().getLength()); // это позволяет переводить каретку в JTextArea каждый раз когда мы отправляем сообщение
         try {
-            file.update(FILE_NAME, message);
+            file.update(message);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

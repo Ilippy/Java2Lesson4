@@ -12,7 +12,7 @@ public class Files {
         this.file = new File(fileName);
     }
 
-    private void write(String fileName, String text) {
+    private void write(String text) {
         //Определяем файл
         File file = new File(fileName);
 
@@ -42,7 +42,11 @@ public class Files {
         //Этот спец. объект для построения строки
         StringBuilder sb = new StringBuilder();
 
-        exists(fileName);
+        try {
+            existFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             //Объект для чтения файла в буфер
@@ -66,20 +70,18 @@ public class Files {
         return sb.toString();
     }
 
-    private void exists(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        if (!file.exists()) {
-            throw new FileNotFoundException(file.getName());
-        }
-    }
 
-    public void update(String nameFile, String newText) throws FileNotFoundException {
-        exists(fileName);
+    public void update( String newText) throws FileNotFoundException {
+        try {
+            existFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         StringBuilder sb = new StringBuilder();
-        String oldFile = read(nameFile);
+        String oldFile = read(fileName);
         sb.append(oldFile);
         sb.append(newText);
-        write(nameFile, sb.toString());
+        write(sb.toString());
     }
 
     public double checkFileSize() {
@@ -94,6 +96,15 @@ public class Files {
 
     }
 
+    private void existFile() throws IOException {
+        if(!file.exists()){
+            file.createNewFile();
+        }
+    }
+
+	public void delete() {
+		if(file.exists()) file.delete();
+	}
 
 }
 
