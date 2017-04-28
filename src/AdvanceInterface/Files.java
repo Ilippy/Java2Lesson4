@@ -4,10 +4,15 @@ package AdvanceInterface;
 import java.io.*;
 
 public class Files {
-    private static String fileName = "src/AdvanceInterface/history.txt";
-    private static File file = new File(fileName);
+    private String fileName;
+    private File file;
 
-    private static void write(String fileName, String text) {
+    public Files(String fileName) {
+        this.fileName = fileName;
+        this.file = new File(fileName);
+    }
+
+    private void write(String fileName, String text) {
         //Определяем файл
         File file = new File(fileName);
 
@@ -33,7 +38,7 @@ public class Files {
         }
     }
 
-    public static String read(String fileName) throws FileNotFoundException {
+    public String read(String fileName) throws FileNotFoundException {
         //Этот спец. объект для построения строки
         StringBuilder sb = new StringBuilder();
 
@@ -61,14 +66,14 @@ public class Files {
         return sb.toString();
     }
 
-    private static void exists(String fileName) throws FileNotFoundException {
+    private void exists(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
         if (!file.exists()) {
             throw new FileNotFoundException(file.getName());
         }
     }
 
-    public static void update(String nameFile, String newText) throws FileNotFoundException {
+    public void update(String nameFile, String newText) throws FileNotFoundException {
         exists(fileName);
         StringBuilder sb = new StringBuilder();
         String oldFile = read(nameFile);
@@ -77,7 +82,17 @@ public class Files {
         write(nameFile, sb.toString());
     }
 
+    public double checkFileSize() {
+        /*try {
+            if (!file.exists())
+                file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
 
+        return file.length();
+
+    }
 
 
 }

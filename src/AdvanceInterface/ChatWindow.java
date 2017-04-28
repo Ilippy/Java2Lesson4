@@ -15,23 +15,34 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 
-public class ChatWindow extends JFrame{
+public class ChatWindow extends JFrame implements Runnable {
 
+    private static final String CHECK_FILE_SIZE = "Check file size";
+    private static final String RUNNING = "Running";
     private JPanel contentPane;
     private JTextField txtMessage;
     private JTextArea history;
     //private DefaultCaret caret;
     private static final String CHAT_CLIENT = "Chat Client";
-    private static String fileName = "src/AdvanceInterface/history.txt";
+    private static String FILE_NAME = "src/AdvanceInterface/history.txt";
+    private Thread run, checkFileSize;
+    private boolean running = false;
+    private Files file;
+    private double fileSize;
 
 
-    public ChatWindow()  {
+    public ChatWindow() {
         creatingWindow();
+        file = new Files(FILE_NAME);
         try {
-            history.setText(Files.read(fileName));
+            history.setText(file.read(FILE_NAME));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        fileSize = file.checkFileSize();
+        running = true;
+        run = new Thread(this, RUNNING);
+        run.start();
     }
 
     private void creatingWindow() {
@@ -71,9 +82,9 @@ public class ChatWindow extends JFrame{
         contentPane.add(scroll, scrollConstraints);
 
         txtMessage = new JTextField();
-        txtMessage.addKeyListener(new KeyAdapter(){
-            public void keyPressed(KeyEvent e){
-                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+        txtMessage.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     send(txtMessage.getText());
                 }
             }
@@ -110,20 +121,39 @@ public class ChatWindow extends JFrame{
         txtMessage.requestFocusInWindow();
     }
 
-    private void send(String message){
-        if(message.equals("")) return;
-        console(message);
-        txtMessage.setText("");
-    }
-
-    private void console(String msg){
-        msg += System.lineSeparator();
-        history.append(msg);
+    private void send(String message) {
+        if (message.equals("")) return;
+        message += System.lineSeparator();
         history.setCaretPosition(history.getDocument().getLength()); // это позволяет переводить каретку в JTextArea каждый раз когда мы отправляем сообщение
         try {
-            Files.update(fileName, msg);
+            file.update(FILE_NAME, message);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        txtMessage.setText("");
+    }
+
+
+    @Override
+    public void run() {
+        checkFileSize();
+    }
+
+    private void checkFileSize() {
+        checkFileSize = new Thread(CHECK_FILE_SIZE) {
+            public void run() {
+                while (running) {
+                    double oldFileSize = file.checkFileSize();
+                    if (oldFileSize != fileSize) {
+                        try {
+                            history.setText(file.read(FILE_NAME));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        };
+        checkFileSize.start();
     }
 }
