@@ -77,14 +77,8 @@ public class Files {
     }
 
     public double checkFileSize() {
-        /*try {
-            if (!file.exists())
-                file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        return file.length();
+		double f = file.length();
+        return f;
 
     }
 

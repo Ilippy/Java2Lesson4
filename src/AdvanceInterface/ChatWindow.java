@@ -3,17 +3,15 @@ package AdvanceInterface;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-
 import javax.swing.*;
-//import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-//import javax.swing.text.DefaultCaret;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
+import java.awt.Font;
 
 public class ChatWindow extends JFrame implements Runnable {
 
@@ -24,22 +22,27 @@ public class ChatWindow extends JFrame implements Runnable {
 	private JMenu mnFile;
 	private JMenuItem mntmDeleteFile;
 	private JMenuItem mntmExit;
+	Font txtFont = new Font("Calibri", Font.PLAIN, 16);
 	//private DefaultCaret caret;
 
 	private Thread run, checkFileSize;
 	private boolean running = false;
 	private Files file;
 	private double fileSize;
+	private String fileName;
+	private String login;
 
 	private static final String CHAT_CLIENT = "Chat Client";
-	private static String FILE_NAME = "src/AdvanceInterface/history.txt";
 	private static final String CHECK_FILE_SIZE = "Check file size";
 	private static final String RUNNING = "Running";
 	private static final String FILE = "File";
+	private static final String EXIT = "Exit";
 
-	public ChatWindow() {
+	public ChatWindow(String login, String shortFileName) {
+		this.login = login;
+		this.fileName = "src/AdvanceInterface/" + shortFileName + ".txt";
 		creatingWindow();
-		file = new Files(FILE_NAME);
+		file = new Files(fileName);
 		try {
 			history.setText(file.read());
 		} catch (FileNotFoundException e) {
@@ -52,11 +55,11 @@ public class ChatWindow extends JFrame implements Runnable {
 	}
 
 	private void creatingWindow() {
-		/*try {
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e1) {
             e1.printStackTrace();
-        }*/
+        }
 		setTitle(CHAT_CLIENT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(880, 570);
@@ -74,6 +77,14 @@ public class ChatWindow extends JFrame implements Runnable {
 			}
 		});
 		mnFile.add(mntmDeleteFile);
+		mntmExit = new JMenuItem(EXIT);
+		mntmExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		mnFile.add(mntmExit);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -85,9 +96,10 @@ public class ChatWindow extends JFrame implements Runnable {
 		contentPane.setLayout(gbl_contentPane);
 
 		history = new JTextArea();
+		history.setFont(txtFont);
 		history.setEditable(false);
 		JScrollPane scroll = new JScrollPane(history);
-        /*caret = (DefaultCaret) history.getCaret();
+		/*caret = (DefaultCaret) history.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE); */
 		GridBagConstraints scrollConstraints = new GridBagConstraints();
 		scrollConstraints.insets = new Insets(0, 0, 5, 5);
@@ -143,7 +155,7 @@ public class ChatWindow extends JFrame implements Runnable {
 
 	private void send(String message) {
 		if (message.equals("")) return;
-		message += System.lineSeparator();
+		message= login+": "+message+ System.lineSeparator();
 		history.setCaretPosition(history.getDocument().getLength()); // это позволяет переводить каретку в JTextArea каждый раз когда мы отправляем сообщение
 		try {
 			file.update(message);
