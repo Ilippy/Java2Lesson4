@@ -98,6 +98,8 @@ public class ChatWindow extends JFrame implements Runnable {
 		history = new JTextArea();
 		history.setFont(txtFont);
 		history.setEditable(false);
+		history.setLineWrap(true);
+
 		JScrollPane scroll = new JScrollPane(history);
 		/*caret = (DefaultCaret) history.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE); */
